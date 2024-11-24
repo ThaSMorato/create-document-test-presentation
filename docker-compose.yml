@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  postgres:
+    container_name: document-postgres
+    image: postgres
+    ports:
+      - 15432:5432
+    environment:
+      POSTGRES_USER: docker
+      POSTGRES_PASSWORD: docker
+      POSTGRES_DB: document-db
+    volumes:
+      - ./.data/pg:/var/lib/postgresql/data
+    networks:
+      - appNetwork
+
+  postgres-test:
+    container_name: document-postgres-test
+    image: postgres
+    ports:
+      - 25432:5432
+    environment:
+      POSTGRES_USER: docker
+      POSTGRES_PASSWORD: docker
+      POSTGRES_DB: document-db-test
+    networks:
+      - appNetwork
+
+
+networks:
+  appNetwork:
+    driver: bridge
