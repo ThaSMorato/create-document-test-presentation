@@ -47,6 +47,6 @@ model DocumentForm {
   documentType        DocumentType
   clientMaritalStatus MaritalStatus
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
 }

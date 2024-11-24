@@ -1,25 +1,25 @@
-import { Entity } from "@/core/entities/entity"
-import { UniqueEntityID } from "@/core/entities/unique-entity-id"
-import { Optional } from "@/core/types/optional"
+import { Entity } from '@/core/entities/entity'
+import { UniqueEntityID } from '@/core/entities/unique-entity-id'
+import { Optional } from '@/core/types/optional'
 
 export enum DocumentStatus {
-  DRAFT="DRAFT",
-  PENDING="PENDING",
-  APPROVED="APPROVED",
-  REJECTED="REJECTED",
+  DRAFT = 'DRAFT',
+  PENDING = 'PENDING',
+  APPROVED = 'APPROVED',
+  REJECTED = 'REJECTED',
 }
 
 export enum DocumentType {
-  ID="ID",
-  DRIVING_LICENSE="DRIVING_LICENSE",
-  EIN="EIN",
+  ID = 'ID',
+  DRIVING_LICENSE = 'DRIVING_LICENSE',
+  EIN = 'EIN',
 }
 
 export enum MaritalStatus {
-  SINGLE="SINGLE",
-  MARRIED="MARRIED",
-  DIVORCED="DIVORCED",
-  WIDOWED="WIDOWED",
+  SINGLE = 'SINGLE',
+  MARRIED = 'MARRIED',
+  DIVORCED = 'DIVORCED',
+  WIDOWED = 'WIDOWED',
 }
 
 export interface DocumentProps {
@@ -37,7 +37,7 @@ export interface DocumentProps {
   updatedAt?: Date
 }
 
-export class Document extends Entity<DocumentProps>{
+export class Document extends Entity<DocumentProps> {
   static create(
     props: Optional<DocumentProps, 'createdAt'>,
     id?: UniqueEntityID,
@@ -54,98 +54,98 @@ export class Document extends Entity<DocumentProps>{
   }
 
   get title(): string {
-    return this.props.title;
+    return this.props.title
   }
 
   set title(value: string) {
-    this.props.title = value;
+    this.props.title = value
   }
 
   get content(): string {
-    return this.props.content;
+    return this.props.content
   }
 
   set content(value: string) {
-    this.props.content = value;
+    this.props.content = value
   }
 
   get document(): string {
-    return this.props.document;
+    return this.props.document
   }
 
   set document(value: string) {
-    this.props.document = value;
+    this.props.document = value
   }
 
   get clientName(): string {
-    return this.props.clientName;
+    return this.props.clientName
   }
 
   set clientName(value: string) {
-    this.props.clientName = value;
+    this.props.clientName = value
   }
 
   get clientEmail(): string {
-    return this.props.clientEmail;
+    return this.props.clientEmail
   }
 
   set clientEmail(value: string) {
-    this.props.clientEmail = value;
+    this.props.clientEmail = value
   }
 
   get clientPhone(): string {
-    return this.props.clientPhone;
+    return this.props.clientPhone
   }
 
   set clientPhone(value: string) {
-    this.props.clientPhone = value;
+    this.props.clientPhone = value
   }
 
   get clientAddress(): string {
-    return this.props.clientAddress;
+    return this.props.clientAddress
   }
 
   set clientAddress(value: string) {
-    this.props.clientAddress = value;
+    this.props.clientAddress = value
   }
 
   get status(): DocumentStatus {
-    return this.props.status;
+    return this.props.status
   }
 
   set status(value: DocumentStatus) {
-    this.props.status = value;
+    this.props.status = value
   }
 
   get documentType(): DocumentType {
-    return this.props.documentType;
+    return this.props.documentType
   }
 
   set documentType(value: DocumentType) {
-    this.props.documentType = value;
+    this.props.documentType = value
   }
 
   get clientMaritalStatus(): MaritalStatus {
-    return this.props.clientMaritalStatus;
+    return this.props.clientMaritalStatus
   }
 
   set clientMaritalStatus(value: MaritalStatus) {
-    this.props.clientMaritalStatus = value;
+    this.props.clientMaritalStatus = value
   }
 
   get createdAt(): Date {
-    return this.props.createdAt;
+    return this.props.createdAt
   }
 
   set createdAt(value: Date) {
-    this.props.createdAt = value;
+    this.props.createdAt = value
   }
 
   get updatedAt(): Date | undefined {
-    return this.props.updatedAt;
+    return this.props.updatedAt
   }
 
   set updatedAt(value: Date | undefined) {
-    this.props.updatedAt = value;
+    this.props.updatedAt = value
   }
 }
