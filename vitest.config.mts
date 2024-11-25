@@ -6,6 +6,10 @@ export default defineConfig({
   test: {
     globals: true,
     root: './',
+    coverage: {
+      include: ['src/*/application/**/*.ts'],
+      exclude: ['src/*/application/repositories/*'],
+    },
   },
   plugins: [
     tsConfigPaths(),
