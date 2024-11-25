@@ -23,11 +23,7 @@ export class InitialStep {
       errors.push('document')
     }
 
-    if (
-      notNumberRegex.test(clientPhone) ||
-      clientPhone.length > 13 ||
-      clientPhone.length < 11
-    ) {
+    if (notNumberRegex.test(clientPhone)) {
       errors.push('clientPhone')
     }
 
