@@ -42,3 +42,5 @@ export class InitialStep {
     })
   }
 }
+
+export const initialStep = new InitialStep()

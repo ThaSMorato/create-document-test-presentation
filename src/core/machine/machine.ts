@@ -8,13 +8,11 @@ export class Machine {
     step: MachineStep
     isLeft?: boolean
     isRight?: boolean
+  } = {
+    step: MachineStep.INITIAL,
   }
 
-  constructor(private readonly initialStep: InitialStep) {
-    this.machineState = {
-      step: MachineStep.INITIAL,
-    }
-  }
+  constructor(private readonly initialStep: InitialStep) {}
 
   private get usecaseLib() {
     return {
@@ -23,6 +21,10 @@ export class Machine {
   }
 
   async handle(document: CreateDocumentUseCaseRequest) {
+    this.machineState = {
+      step: MachineStep.INITIAL,
+    }
+
     while (this.hasNext) {
       const currentState = this.currentState
       const useCase = this.usecaseLib[currentState]

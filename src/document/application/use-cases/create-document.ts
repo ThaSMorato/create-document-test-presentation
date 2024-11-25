@@ -5,7 +5,9 @@ import {
   DocumentType,
   MaritalStatus,
 } from '@/document/domain/entities/document'
+import { prismaDocumentRepository } from '@/infra/database/prisma/prisma-document-repository'
 
+import { initialStep } from '../machine-steps/initial-step'
 import { DocumentsRepository } from '../repositories/documents-repository'
 
 export type CreateDocumentUseCaseRequest = {
@@ -39,3 +41,8 @@ export class CreateDocumentUseCase {
     return this.documentsRepository.create(documentInstance)
   }
 }
+
+export const createDocumentUseCase = new CreateDocumentUseCase(
+  prismaDocumentRepository,
+  new Machine(initialStep),
+)
