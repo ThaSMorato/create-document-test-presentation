@@ -3,6 +3,8 @@ import { InMemoryDocumentsRepository } from 'tests/repositories/in-memory/in-mem
 import { mockedDocumentsRepository } from 'tests/repositories/mock/mocked-documents-repository'
 import type { MockInstance } from 'vitest'
 
+import { Machine } from '@/core/machine/machine'
+import { InitialStep } from '@/document/application/machine-steps/initial-step'
 import { CreateDocumentUseCase } from '@/document/application/use-cases/create-document'
 import {
   Document,
@@ -13,6 +15,8 @@ import {
 
 let sut: CreateDocumentUseCase
 let inMemoryDocsRepository: InMemoryDocumentsRepository
+let initialStep: InitialStep
+let machine: Machine
 let createSpy: MockInstance<(document: Document) => Promise<Document>>
 
 const document = {
@@ -20,21 +24,43 @@ const document = {
   clientEmail: faker.internet.email(),
   clientMaritalStatus: MaritalStatus.SINGLE,
   clientName: faker.person.fullName(),
-  clientPhone: faker.phone.number({ style: 'international' }),
+  clientPhone: faker.phone
+    .number({ style: 'international' })
+    .replaceAll(/\D/g, ''),
   content: faker.lorem.paragraphs(2),
-  document: faker.commerce.isbn(),
+  document: faker.commerce.isbn().replaceAll(/\D/g, ''),
   documentType: DocumentType.EIN,
   status: DocumentStatus.APPROVED,
   title: faker.lorem.words(3),
 }
 
+const mockedHandle = vi.fn()
+
+const mockedMachine = {
+  handle: mockedHandle,
+} as unknown as Machine
+
 describe('CreateDocumentUseCase', () => {
   describe('unit tests', () => {
     beforeEach(() => {
-      sut = new CreateDocumentUseCase(mockedDocumentsRepository)
+      sut = new CreateDocumentUseCase(mockedDocumentsRepository, mockedMachine)
     })
 
-    it('should call create from repository with de document', async () => {
+    it('should throw an error if machine returns invalid', async () => {
+      mockedHandle.mockResolvedValue({
+        isLeft: true,
+        isRight: false,
+        message: 'Invalid fields: document',
+      })
+
+      await expect(sut.execute(document)).rejects.toThrow(
+        'Invalid fields: document',
+      )
+    })
+
+    it('should call create from repository with de document if machine returns valid', async () => {
+      mockedHandle.mockResolvedValue({ isLeft: false, isRight: true })
+
       await sut.execute(document)
 
       expect(mockedDocumentsRepository.create).toHaveBeenCalledWith(
@@ -46,12 +72,36 @@ describe('CreateDocumentUseCase', () => {
   describe('integration tests', () => {
     beforeEach(() => {
       inMemoryDocsRepository = new InMemoryDocumentsRepository()
-      sut = new CreateDocumentUseCase(inMemoryDocsRepository)
+      initialStep = new InitialStep()
+      machine = new Machine(initialStep)
+      sut = new CreateDocumentUseCase(inMemoryDocsRepository, machine)
 
       createSpy = vi.spyOn(inMemoryDocsRepository, 'create')
     })
 
-    it('should create a document', async () => {
+    it('should throw an error if document is invalid', async () => {
+      await expect(
+        sut.execute({ ...document, document: 'invalid' }),
+      ).rejects.toThrow('Invalid fields: document')
+    })
+
+    it("should throw an error if client's phone is invalid", async () => {
+      await expect(
+        sut.execute({ ...document, clientPhone: 'invalid' }),
+      ).rejects.toThrow('Invalid fields: clientPhone')
+    })
+
+    it('should throw an error if client phone is invalid and document is invalid', async () => {
+      await expect(
+        sut.execute({
+          ...document,
+          clientPhone: 'invalid',
+          document: 'invalid',
+        }),
+      ).rejects.toThrow('Invalid fields: document, clientPhone')
+    })
+
+    it('should create a document if properties are right', async () => {
       await sut.execute(document)
 
       expect(createSpy).toHaveBeenCalledWith(expect.any(Document))

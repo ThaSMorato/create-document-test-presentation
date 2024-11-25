@@ -1,3 +1,4 @@
+import { Machine } from '@/core/machine/machine'
 import {
   Document,
   DocumentStatus,
@@ -21,32 +22,19 @@ export type CreateDocumentUseCaseRequest = {
 }
 
 export class CreateDocumentUseCase {
-  constructor(private readonly documentsRepository: DocumentsRepository) {}
+  constructor(
+    private readonly documentsRepository: DocumentsRepository,
+    private readonly machine: Machine,
+  ) {}
 
-  async execute({
-    clientAddress,
-    clientEmail,
-    clientMaritalStatus,
-    clientName,
-    clientPhone,
-    content,
-    document,
-    documentType,
-    status,
-    title,
-  }: CreateDocumentUseCaseRequest): Promise<Document> {
-    const documentInstance = Document.create({
-      clientAddress,
-      clientEmail,
-      clientMaritalStatus,
-      clientName,
-      clientPhone,
-      content,
-      document,
-      documentType,
-      status,
-      title,
-    })
+  async execute(doc: CreateDocumentUseCaseRequest): Promise<Document> {
+    const isValid = await this.machine.handle(doc)
+
+    if (isValid.isLeft) {
+      throw new Error(isValid.message)
+    }
+
+    const documentInstance = Document.create(doc)
 
     return this.documentsRepository.create(documentInstance)
   }
