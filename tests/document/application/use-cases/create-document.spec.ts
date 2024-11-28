@@ -83,6 +83,7 @@ describe('CreateDocumentUseCase', () => {
       await expect(
         sut.execute({ ...document, document: 'invalid' }),
       ).rejects.toThrow('Invalid fields: document')
+      expect(inMemoryDocsRepository.items).toHaveLength(0)
     })
 
     it("should throw an error if client's phone is invalid", async () => {

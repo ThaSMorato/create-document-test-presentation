@@ -54,6 +54,9 @@ describe('Create Document Route e2e test', () => {
           clientPhone: 'w1w2e3e4r',
         })
 
+      const createdDocument = await prismaService.documentForm.findFirst()
+
+      expect(createdDocument).toBeNull()
       expect(response.status).toBe(400)
       expect(response.body).toEqual({ message: 'Invalid fields: clientPhone' })
     })
@@ -67,6 +70,9 @@ describe('Create Document Route e2e test', () => {
           document: 'w1w2e3e4r',
         })
 
+      const createdDocument = await prismaService.documentForm.findFirst()
+
+      expect(createdDocument).toBeNull()
       expect(response.status).toBe(400)
       expect(response.body).toEqual({
         message: 'Invalid fields: document, clientPhone',
