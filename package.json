@@ -54,5 +54,8 @@
     "dotenv": "^16.4.5",
     "express": "^4.21.1",
     "prisma": "^5.22.0"
+  },
+  "engines": {
+    "node": "22.x"
   }
 }
