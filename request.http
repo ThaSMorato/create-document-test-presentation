@@ -1,0 +1,15 @@
+POST http://localhost:3333/documents
+Content-Type: application/json
+
+{
+  "clientAddress": "Teste de endereço",
+  "clientEmail": "test@mail.com",
+  "clientMaritalStatus": "SINGLE",
+  "clientName": "Jhon",
+  "clientPhone": "5517999999999",
+  "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam nec purus nec nunc",
+  "document": "99988877755512",
+  "documentType": "ID",
+  "status": "DRAFT",
+  "title": "Teste"
+}
